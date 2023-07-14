@@ -64,13 +64,14 @@ class CharacterSerializer(serializers.ModelSerializer):
 
 
 class WeaponSerializer(serializers.ModelSerializer):
-
+    item = ItemSerializer()
     class Meta:
         model = ItemWeapon
         fields = ['damage_type', 'strength', 'intelligence', 'dexterity', 'item']
 
     def create(self, validated_data):
         item_data = validated_data.pop('item')
-        item = Item.objects.create(**item_data)
+        item_data=item_data["name"]
+        item = Item.objects.create(name=item_data)
         weapon = ItemWeapon.objects.create(item=item, **validated_data)
         return weapon

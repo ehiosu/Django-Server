@@ -117,7 +117,10 @@ class AddItemToInventoryView(APIView):
         if item in inventory.items.all():
             return Response({'error': 'Item already in inventory'}, status=status.HTTP_400_BAD_REQUEST)
 
-        inventory.items.add(item)
+        # Create a new copy of the item
+        new_item = Item.objects.create(name=item.name)  # Copy other fields as needed
+
+        inventory.items.add(new_item)
         return Response({'message': 'Item added to inventory'})
     
 
